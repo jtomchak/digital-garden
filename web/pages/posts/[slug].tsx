@@ -14,7 +14,7 @@ const Post = ({ post: { title, name, categories, body } }) => {
       {categories && (
         <ul>
           Posted in
-          {categories.map((category) => (
+          {categories?.map((category) => (
             <li key={category}>{category}</li>
           ))}
         </ul>

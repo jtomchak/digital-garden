@@ -2,6 +2,16 @@ export default {
   name: "post",
   title: "Post",
   type: "document",
+  initialValue: () => ({
+    publishedAt: new Date().toISOString(),
+    author: [
+      {
+        _type: "authorReference",
+        _ref: "fb96e2fc-30aa-4425-a38a-8b0221f717c7", // defaults to ME!
+        _type: "reference",
+      },
+    ],
+  }),
   fields: [
     {
       name: "title",
