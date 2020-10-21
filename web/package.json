@@ -1,40 +1,34 @@
 {
-  "name": "web",
+  "name": "with-tailwindcss-emotion",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "@sanity/client": "^1.150.7",
-    "groq": "^1.150.1",
-    "next": "^9.5.3",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-markdown": "^4.3.1"
-  },
   "scripts": {
-    "dev": "next",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "jest --watch",
-    "test:ci": "jest --ci"
+    "build:base-css": "tailwindcss build ./styles/tailwind.base.css -o ./styles/base.css"
+  },
+  "dependencies": {
+    "@emotion/css": "^11.0.0-next.12",
+    "@emotion/react": "^11.0.0-next.12",
+    "@emotion/styled": "^11.0.0-next.12",
+    "@sanity/client": "^2.0.1",
+    "groq": "^2.0.1",
+    "next": "latest",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-markdown": "^5.0.1"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.0.4",
-    "@types/jest": "^26.0.14",
-    "@types/node": "^14.11.2",
-    "@types/react": "^16.9.49",
-    "@typescript-eslint/eslint-plugin": "^4.2.0",
-    "@typescript-eslint/parser": "^4.2.0",
-    "babel-jest": "^26.3.0",
-    "eslint": "^7.10.0",
-    "eslint-plugin-react": "^7.21.2",
-    "jest": "^26.4.2",
-    "postcss-flexbugs-fixes": "^4.2.1",
-    "postcss-preset-env": "^6.7.0",
-    "react-test-renderer": "^16.13.1",
-    "tailwindcss": "^1.8.10",
-    "ts-jest": "^26.4.0",
+    "@babel/core": "^7.9.0",
+    "@emotion/babel-plugin": "^11.0.0-next.12",
+    "@emotion/server": "^11.0.0-next.12",
+    "@tailwindcss/ui": "^0.2.2",
+    "@tailwindcssinjs/macro": "^0.3.1",
+    "@types/node": "^14.14.2",
+    "@types/react": "^16.9.53",
+    "babel-plugin-macros": "2.8.0",
+    "tailwindcss": "^1.6.0",
     "typescript": "^4.0.3"
-  }
+  },
+  "license": "MIT"
 }

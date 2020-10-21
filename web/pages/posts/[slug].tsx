@@ -3,7 +3,6 @@ import client from "../../client";
 import ReactMarkdown from "react-markdown";
 // https://github.com/rexxars/react-markdown
 
-import { GetStaticProps } from "next";
 
 const Post = ({ post: { title, name, categories, body } }) => {
   return (

@@ -1,4 +1,5 @@
-// index.js
+import { css } from "@emotion/css";
+import tw from "@tailwindcssinjs/macro";
 import Link from "next/link";
 import client from "../client";
 
