@@ -1,15 +1,21 @@
+import {Fragment } from 'react'
 import groq from "groq";
+import renderToString from 'next-mdx-remote/render-to-string'
+import hydrate from 'next-mdx-remote/hydrate'
 import client from "../../client";
-import ReactMarkdown from "react-markdown";
-// https://github.com/rexxars/react-markdown
 
 
-const Post = ({ post: { title, name, categories, body } }) => {
+
+import PostContainer from "../../components/PostContainer"
+
+
+const Post = ({ title, name, categories, body } ) => {
+  const _title = hydrate(title, {})
+  const content = hydrate(body, {  })
   return (
-    <article>
-      <h1>{title}</h1>
-      <ReactMarkdown source={body} escapeHtml={false} />
-      <span>By {name}</span>
+   <>
+   <PostContainer title={_title} name={name} content={content} />
+      
       {categories && (
         <ul>
           Posted in
@@ -18,8 +24,8 @@ const Post = ({ post: { title, name, categories, body } }) => {
           ))}
         </ul>
       )}
-    </article>
-  );
+ </>
+  )
 };
 
 const postsQuery = `*[_type == "post"] { _id, "slug":slug.current }`;
@@ -45,8 +51,15 @@ export const getStaticPaths = async () => {
 
 // This function gets called at build time on server-side.
 export const getStaticProps = async ({ params }) => {
-  const post = await client.fetch(singlePostQuery, { slug: params.slug });
-  return { props: { post } };
+  const  { title, name, categories = null, body } = await client.fetch(singlePostQuery, { slug: params.slug });
+  const mdxTitle = await renderToString(title, {})
+  const mdxBody = await renderToString(body, {})
+  return { props: { 
+    title: mdxTitle, 
+    body: mdxBody,
+    name,
+    categories
+   } };
 };
 
 export default Post;

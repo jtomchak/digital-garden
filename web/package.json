@@ -5,18 +5,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "build:base-css": "tailwindcss build ./styles/tailwind.base.css -o ./styles/base.css"
+    "css": "tailwindcss build ./styles/tailwind.base.css -o ./styles/base.css"
   },
   "dependencies": {
     "@emotion/css": "^11.0.0-next.12",
     "@emotion/react": "^11.0.0-next.12",
     "@emotion/styled": "^11.0.0-next.12",
     "@sanity/client": "^2.0.1",
+    "emotion": "^10.0.27",
     "groq": "^2.0.1",
     "next": "latest",
+    "next-mdx-remote": "^1.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-markdown": "^5.0.1"
+    "react-markdown": "^5.0.1",
+    "tailwindcss-dark-mode": "^1.1.7"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
