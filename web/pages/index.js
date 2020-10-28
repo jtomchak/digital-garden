@@ -8,10 +8,20 @@ import PostContainer from "../components/PostContainer";
 const Index = ({ posts = [] }) => {
   return (
     <>
-      {posts.map(({ _id, title, body, slug }) => {
+      {posts.map(({ _id, title, body, slug, categories }) => {
         const _title = hydrate(title, {});
         const content = hydrate(body, {});
-        return <PostContainer key={_id} title={_title} content={content} />;
+        return (
+          <PostContainer
+            key={_id}
+            post={{
+              title: _title,
+              content,
+              categories,
+              slug,
+            }}
+          />
+        );
       })}
     </>
   );
@@ -19,18 +29,25 @@ const Index = ({ posts = [] }) => {
 
 export const getStaticProps = async () => {
   const rawPosts = await client.fetch(
-    `*[_type == "post" && publishedAt < now()]|order(publishedAt desc)`
+    `*[_type == "post" && publishedAt < now()]|order(publishedAt desc){
+      ...,
+      "slug":slug.current,
+      "categories":categories[]->.title
+    }`
   );
   // mdx render
-  const postResponse = rawPosts.map(async ({ title, body, ...rest }) => {
-    const mdxTitle = await renderToString(title, {});
-    const mdxBody = await renderToString(body, {});
-    return {
-      title: mdxTitle,
-      body: mdxBody,
-      ...rest,
-    };
-  });
+  const postResponse = rawPosts.map(
+    async ({ title, body, categories = null, ...rest }) => {
+      const mdxTitle = await renderToString(title, {});
+      const mdxBody = await renderToString(body, {});
+      return {
+        title: mdxTitle,
+        body: mdxBody,
+        categories,
+        ...rest,
+      };
+    }
+  );
   // All Rendered yet?
   const renderedPosts = await Promise.all(postResponse);
 

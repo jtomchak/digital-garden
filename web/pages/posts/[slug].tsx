@@ -14,16 +14,14 @@ const Post = ({ title, name, categories, body } ) => {
   const content = hydrate(body, {  })
   return (
    <>
-   <PostContainer title={_title} name={name} content={content} />
+   <PostContainer post={{
+     title: _title,
+     name, 
+     content,
+     categories
+   }} />
       
-      {categories && (
-        <ul>
-          Posted in
-          {categories?.map((category) => (
-            <li key={category}>{category}</li>
-          ))}
-        </ul>
-      )}
+     
  </>
   )
 };

@@ -45,7 +45,7 @@ const Content = styled(`div`)`
   }
 `;
 
-const PostContainer = ({ title, name, content }) => {
+const PostContainer = ({ post: { title, name, content, categories } }) => {
   return (
     <PostWrapper>
       <section className={sectionStyled}>

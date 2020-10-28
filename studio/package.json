@@ -22,9 +22,13 @@
     "@sanity/desk-tool": "^1.150.7",
     "@sanity/vision": "^1.150.6",
     "prop-types": "^15.6",
+    "r2": "^2.0.1",
     "react": "^16.2",
     "react-dom": "^16.2",
     "sanity-plugin-markdown": "^1.0.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "slugify": "^1.4.5"
+  }
 }
