@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import xw, { cx } from "xwind";
+import xw from "xwind";
 
 const PostContainer = ({ post: { title, name, content, categories } }) => {
   return (
