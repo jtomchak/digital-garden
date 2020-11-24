@@ -8,7 +8,7 @@ import PostContainer from "../components/PostContainer";
 const Index = ({ posts = [] }) => {
   return (
     <>
-      {posts.map(({ _id, title, body, slug, categories }) => {
+      {posts.map(({ _id, title, body, relativeUrl, categories }) => {
         const _title = hydrate(title, {});
         const content = hydrate(body, {});
         return (
@@ -18,7 +18,7 @@ const Index = ({ posts = [] }) => {
               title: _title,
               content,
               categories,
-              slug,
+              relativeUrl,
             }}
           />
         );
@@ -37,13 +37,16 @@ export const getStaticProps = async () => {
   );
   // mdx render
   const postResponse = rawPosts.map(
-    async ({ title, body, categories = null, ...rest }) => {
+    async ({ title, body, categories = null, publishedAt, slug, ...rest }) => {
       const mdxTitle = await renderToString(title, {});
       const mdxBody = await renderToString(body, {});
+      const datePath = new Date(publishedAt).toLocaleDateString("en-GB");
+      const relativeUrl = `${datePath}/${slug}`;
       return {
         title: mdxTitle,
         body: mdxBody,
         categories,
+        relativeUrl,
         ...rest,
       };
     }
