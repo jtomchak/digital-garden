@@ -1,13 +1,20 @@
 import renderToString from "next-mdx-remote/render-to-string";
 import hydrate from "next-mdx-remote/hydrate";
 import Link from "next/link";
+import styled from "@emotion/styled";
+import xw, { cx } from "xwind";
+
 import client from "../client";
 
 import PostContainer from "../components/PostContainer";
 
+const styles = {
+  container: xw`text-gray-200 flex flex-col  justify-center items-center`,
+};
+
 const Index = ({ posts = [] }) => {
   return (
-    <>
+    <div css={styles.container}>
       {posts.map(({ _id, title, body, relativeUrl, categories }) => {
         const _title = hydrate(title, {});
         const content = hydrate(body, {});
@@ -23,7 +30,7 @@ const Index = ({ posts = [] }) => {
           />
         );
       })}
-    </>
+    </div>
   );
 };
 
