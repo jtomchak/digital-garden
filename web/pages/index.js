@@ -7,6 +7,10 @@ import xw, { cx } from "xwind";
 import client from "../client";
 
 import PostContainer from "../components/PostContainer";
+import CodeHighlight from "../components/CodeHighlight";
+import InLineCode from "../components/InLineCode";
+
+const components = { code: CodeHighlight, inlineCode: InLineCode };
 
 const styles = {
   container: xw`text-gray-200 flex flex-col  justify-center items-center`,
@@ -17,7 +21,7 @@ const Index = ({ posts = [] }) => {
     <div css={styles.container}>
       {posts.map(({ _id, title, body, relativeUrl, categories }) => {
         const _title = hydrate(title, {});
-        const content = hydrate(body, {});
+        const content = hydrate(body, { components });
         return (
           <PostContainer
             key={_id}
@@ -46,7 +50,7 @@ export const getStaticProps = async () => {
   const postResponse = rawPosts.map(
     async ({ title, body, categories = null, publishedAt, slug, ...rest }) => {
       const mdxTitle = await renderToString(title, {});
-      const mdxBody = await renderToString(body, {});
+      const mdxBody = await renderToString(body, { components }, null);
       const datePath = new Date(publishedAt).toLocaleDateString("en-GB");
       const relativeUrl = `${datePath}/${slug}`;
       return {

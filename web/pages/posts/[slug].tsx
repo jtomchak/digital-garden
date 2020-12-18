@@ -7,11 +7,15 @@ import client from "../../client";
 
 
 import PostContainer from "../../components/PostContainer"
+import CodeHighlight from '../../components/CodeHighlight'
+import InLineCode from '../../components/InLineCode'
+
+const components = {code: CodeHighlight, inlineCode: InLineCode}
 
 
 const Post = ({ title, name, categories, body } ) => {
   const _title = hydrate(title, {})
-  const content = hydrate(body, {  })
+  const content = hydrate(body, {components})
   return (
    <>
    <PostContainer post={{
@@ -51,7 +55,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }) => {
   const  { title, name, categories = null, body } = await client.fetch(singlePostQuery, { slug: params.slug });
   const mdxTitle = await renderToString(title, {})
-  const mdxBody = await renderToString(body, {})
+  const mdxBody = await renderToString(body, {components}, null)
   return { props: { 
     title: mdxTitle, 
     body: mdxBody,
