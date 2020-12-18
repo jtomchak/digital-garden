@@ -8,7 +8,7 @@ import client from "../../client";
 
 import PostContainer from "../../components/PostContainer"
 import CodeHighlight from '../../components/CodeHighlight'
-import InLineCode from '../../components/InLineCode'
+import InLineCode from '../../components/InlineCode'
 
 const components = {code: CodeHighlight, inlineCode: InLineCode}
 
