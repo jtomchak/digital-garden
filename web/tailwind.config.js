@@ -3,7 +3,7 @@ const colors = require("tailwindcss/colors");
 const typographyOverride = require("./styles/typography");
 
 module.exports = {
-  // purge: ["./components/**/*.{js,ts,jsx,tsx}", "./pages/**/*.{js,ts,jsx,tsx}"],
+  purge: ["./components/**/*.{js,ts,jsx,tsx}", "./pages/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       typography: typographyOverride,
