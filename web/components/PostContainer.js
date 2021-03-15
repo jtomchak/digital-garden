@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled from "@emotion/styled";
 import xw from "xwind";
 
