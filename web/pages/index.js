@@ -1,6 +1,7 @@
 import renderToString from "next-mdx-remote/render-to-string";
 import hydrate from "next-mdx-remote/hydrate";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import xw, { cx } from "xwind";
 
@@ -22,8 +23,8 @@ const Index = ({ posts = [] }) => {
       navigator
         .share({
           title: title,
-          text: `Check out ${title} from Jesse T`,
-          url: `${document.location.href}/${relativeUrl}`,
+          text: `Check out ${title}`,
+          url: `${document.location.href.replace(/\/$/, "")}${relativeUrl}`,
         })
         .then(() => {
           console.log("Successfully shared");
@@ -35,7 +36,7 @@ const Index = ({ posts = [] }) => {
   };
   return (
     <div css={styles.container}>
-      {posts.map(({ _id, title, body, relativeUrl, category }) => {
+      {posts.map(({ _id, title, body, relativeUrl, category, rawTitle }) => {
         const _title = hydrate(title, {});
         const content = hydrate(body, { components });
         return (
@@ -51,7 +52,7 @@ const Index = ({ posts = [] }) => {
             />
             <span className="absolute  bottom-0 left-8 inline-flex shadow-sm rounded-md">
               <button
-                onClick={(e) => onShare(title, relativeUrl)}
+                onClick={(e) => onShare(rawTitle, relativeUrl)}
                 className="relative inline-flex items-center px-2 py-1 rounded-l-md border border-gray-300 bg-gray text-xs font-medium text-white-700 hover:bg-gray-500 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
               >
                 Share
@@ -100,6 +101,7 @@ export const getStaticProps = async () => {
       const year = new Date(publishedAt).getFullYear().toString();
       const relativeUrl = `/${year}/${category}/${slug}`;
       return {
+        rawTitle: title,
         title: mdxTitle,
         body: mdxBody,
         category,
