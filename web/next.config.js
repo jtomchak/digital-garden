@@ -1,8 +1,6 @@
-const withxwind = require("xwind/next");
-
-module.exports = withxwind({
+module.exports = {
   /* config options here */
   env: {
     SANTIY_PROJECT_ID: process.env.SANTIY_PROJECT_ID,
   },
-});
+};

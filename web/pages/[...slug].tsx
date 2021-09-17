@@ -1,27 +1,23 @@
 import {Fragment } from 'react'
 import groq from "groq";
-import renderToString from 'next-mdx-remote/render-to-string'
-import hydrate from 'next-mdx-remote/hydrate'
+import { serialize } from 'next-mdx-remote/serialize'
 import client from "../client";
 
 
 
 import PostContainer from "../components/PostContainer"
-import CodeHighlight from '../components/CodeHighlight'
-import InLineCode from '../components/InlineCode'
 
-const components = {code: CodeHighlight, inlineCode: InLineCode}
 
 
 const Post = ({ title, name, categories, body } ) => {
-  const _title = hydrate(title, {})
-  const content = hydrate(body, {components})
+  // const _title = MDXRemote(title, {})
+  // const content = MDXRemote(body, components)
   return (
    <>
    <PostContainer post={{
-     title: _title,
+     title,
      name, 
-     content,
+     content: body,
      categories
    }} />
       
@@ -57,8 +53,8 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }) => {
   // for query we only want the sanity slug of the array built in `getStaticPaths`
   const  { title,  body, ...post } = await client.fetch(singlePostQuery, { slug: params.slug[2] });
-  const mdxTitle = await renderToString(title, {})
-  const mdxBody = await renderToString(body, {components}, null)
+  const mdxTitle = await serialize(title, {})
+  const mdxBody = await serialize(body, {})
   return { props: { 
     slug: params.slug,
     title: mdxTitle, 

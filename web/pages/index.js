@@ -1,5 +1,4 @@
-import renderToString from "next-mdx-remote/render-to-string";
-import hydrate from "next-mdx-remote/hydrate";
+import { serialize } from "next-mdx-remote/serialize";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "@emotion/styled";
@@ -8,10 +7,6 @@ import xw, { cx } from "xwind";
 import client from "../client";
 
 import PostContainer from "../components/PostContainer";
-import CodeHighlight from "../components/CodeHighlight";
-import InLineCode from "../components/InlineCode";
-
-const components = { code: CodeHighlight, inlineCode: InLineCode };
 
 const styles = {
   container: xw`text-gray-200 flex flex-col  justify-center items-center`,
@@ -37,15 +32,13 @@ const Index = ({ posts = [] }) => {
   return (
     <div css={styles.container}>
       {posts.map(({ _id, title, body, relativeUrl, category, rawTitle }) => {
-        const _title = hydrate(title, {});
-        const content = hydrate(body, { components });
         return (
           <div className="relative">
             <PostContainer
               key={_id}
               post={{
-                title: _title,
-                content,
+                title,
+                content: body,
                 category,
                 relativeUrl,
               }}
@@ -96,8 +89,8 @@ export const getStaticProps = async () => {
   // mdx render
   const postResponse = rawPosts.map(
     async ({ title, body, category = null, publishedAt, slug, ...rest }) => {
-      const mdxTitle = await renderToString(title, {});
-      const mdxBody = await renderToString(body, { components }, null);
+      const mdxTitle = await serialize(title);
+      const mdxBody = await serialize(body);
       const year = new Date(publishedAt).getFullYear().toString();
       const relativeUrl = `/${year}/${category}/${slug}`;
       return {

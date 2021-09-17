@@ -45,7 +45,6 @@ export default {
       name: "categories",
       title: "Categories",
       type: "array",
-      validation: (Rule) => Rule.required().min(1),
       of: [{ type: "reference", to: { type: "category" } }],
     },
     {
