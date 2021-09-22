@@ -1,9 +1,8 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
-const colors = require("tailwindcss/colors");
-const typographyOverride = require("./styles/typography");
+const defaultTheme = require('tailwindcss/defaultTheme')
+const colors = require('tailwindcss/colors')
+const typographyOverride = require('./styles/typography')
 
 module.exports = {
-  purge: ["./components/**/*.{js,ts,jsx,tsx}", "./pages/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       typography: typographyOverride,
@@ -17,22 +16,17 @@ module.exports = {
   },
   extend: {
     fontFamily: {
-      sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+      sans: ['Inter var', ...defaultTheme.fontFamily.sans],
     },
-    fontWeight: ["hover", "focus"],
+    fontWeight: ['hover', 'focus'],
   },
   variants: {
-    wordBreak: ["responsive", "group-hover"],
-    textOverflow: ["responsive", "group-hover"],
+    wordBreak: ['responsive', 'group-hover'],
+    textOverflow: ['responsive', 'group-hover'],
   },
   plugins: [
-    require("@tailwindcss/typography")({
+    require('@tailwindcss/typography')({
       modifiers: [],
     }),
-    require("@tailwindcss/ui"),
-    require("xwind/plugins/base"),
   ],
-  xwind: {
-    mode: "objectstyles",
-  },
-};
+}

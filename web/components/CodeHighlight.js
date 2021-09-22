@@ -1,10 +1,10 @@
-import React from "react";
-import { css } from "@emotion/react";
-import Highlight, { defaultProps } from "prism-react-renderer";
-import theme from "prism-react-renderer/themes/nightOwl";
+import React from 'react'
+import tw from 'twin.macro'
+import Highlight, { defaultProps } from 'prism-react-renderer'
+import theme from 'prism-react-renderer/themes/nightOwl'
 
 const CodeHighlight = ({ children, className }) => {
-  const language = className?.replace(/language-/, "");
+  const language = className?.replace(/language-/, '')
   return (
     <Highlight
       {...defaultProps}
@@ -14,10 +14,10 @@ const CodeHighlight = ({ children, className }) => {
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre
-          css={css`
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            text-align: justify;
+          css={tw`
+          whitespace-pre-wrap
+          break-normal md:break-all
+          text-justify
           `}
           className={className}
           style={style}
@@ -32,7 +32,7 @@ const CodeHighlight = ({ children, className }) => {
         </pre>
       )}
     </Highlight>
-  );
-};
+  )
+}
 
-export default CodeHighlight;
+export default CodeHighlight
