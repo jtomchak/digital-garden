@@ -1,0 +1,21 @@
+{
+  "title": "Jesse Tomchak",
+  "url": "https://jessetomchak.com/",
+  "language": "en",
+  "description": "Thoughts and ideas.",
+  "feed": {
+    "subtitle": "Excerpts and general accounts.",
+    "filename": "feed.xml",
+    "path": "/feed/feed.xml",
+    "id": "https://jessetomchak.com/"
+  },
+  "jsonfeed": {
+    "path": "/feed/feed.json",
+    "url": "https://jessetomchak.com/feed/feed.json"
+  },
+  "author": {
+    "name": "Jesse Tomchak",
+    "email": "jtomchak@gmail.com",
+    "url": "https://jessetomchak.com/about-me/"
+  }
+}
