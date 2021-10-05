@@ -5,12 +5,24 @@ const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const pluginNavigation = require("@11ty/eleventy-navigation");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
+const htmlmin = require("html-minifier");
+
+const now = String(Date.now());
 
 module.exports = function (eleventyConfig) {
   // Add plugins
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
+
+  // Add tailwind
+  eleventyConfig.addWatchTarget("./styles/tailwind.config.js");
+  eleventyConfig.addWatchTarget("./styles/tailwind.css");
+
+  eleventyConfig.addPassthroughCopy({ "./_tmp/style.css": "./style.css" });
+  eleventyConfig.addShortcode("version", function () {
+    return now;
+  });
 
   // https://www.11ty.dev/docs/data-deep-merge/
   eleventyConfig.setDataDeepMerge(true);
@@ -100,6 +112,24 @@ module.exports = function (eleventyConfig) {
     },
     ui: false,
     ghostMode: false,
+  });
+
+  // Cleanup generated output for PROD
+  eleventyConfig.addTransform("htmlmin", function (content, outputPath) {
+    if (
+      process.env.ELEVENTY_PRODUCTION &&
+      outputPath &&
+      outputPath.endsWith(".html")
+    ) {
+      let minified = htmlmin.minify(content, {
+        useShortDoctype: true,
+        removeComments: true,
+        collapseWhitespace: true,
+      });
+      return minified;
+    }
+
+    return content;
   });
 
   return {
