@@ -76,7 +76,7 @@ async function getAllPosts() {
       slug: item.slug,
       body: item.body,
       date: item.published,
-      tag: item.category?.Tag,
+      tag: item.category.Tag,
     };
   });
 
