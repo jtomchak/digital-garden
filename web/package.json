@@ -1,30 +1,37 @@
 {
   "name": "web",
-  "version": "2.0.0",
-  "description": "Digital Web Garden",
-  "main": "index.js",
-  "author": "Jesse Tomchak",
-  "license": "MIT",
+  "private": true,
   "scripts": {
-    "build": "NODE_ENV=production npx tailwindcss -i styles/tailwind.css -c styles/tailwind.config.js -o _site/style.css --minify & ELEVENTY_PRODUCTION=true eleventy",
-    "dev": "eleventy --serve & npx tailwindcss -i styles/tailwind.css -c styles/tailwind.config.js -o _site/style.css --watch"
-  },
-  "devDependencies": {
-    "@11ty/eleventy": "^1.0.0-canary.44",
-    "@tailwindcss/typography": "^0.4.1",
-    "@tailwindcss/ui": "^0.7.2",
-    "autoprefixer": "^10.3.7",
-    "html-minifier": "^4.0.0",
-    "postcss": "^8.3.9",
-    "tailwindcss": "^2.2.16"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@11ty/eleventy-navigation": "^0.3.2",
-    "@11ty/eleventy-plugin-rss": "^1.1.1",
-    "@11ty/eleventy-plugin-syntaxhighlight": "^3.1.2",
-    "axios": "^0.22.0",
-    "luxon": "^2.0.2",
-    "markdown-it": "^12.2.0",
-    "markdown-it-anchor": "^8.3.1"
+    "date-fns": "^2.25.0",
+    "graphql": "^16.0.0",
+    "graphql-request": "3.6.0",
+    "graphql-tag": "^2.12.5",
+    "import": "^0.0.6",
+    "ky": "^0.28.6",
+    "ky-universal": "^0.9.1",
+    "next": "12.0.2",
+    "next-mdx-remote": "^3.0.7",
+    "prism-react-renderer": "^1.2.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-query": "^3.31.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.4.1",
+    "@tailwindcss/ui": "^0.7.2",
+    "@types/node": "16.11.6",
+    "@types/react": "17.0.33",
+    "autoprefixer": "^10.4.0",
+    "eslint": "7",
+    "eslint-config-next": "12.0.2",
+    "postcss": "^8.3.11",
+    "tailwindcss": "^2.2.19",
+    "typescript": "4.4.4"
   }
 }
