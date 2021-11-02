@@ -1,19 +1,19 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
-const colors = require("tailwindcss/colors");
-const typographyOverride = require("./styles/typography");
-
+const typographyOveride = require("./styles/typography");
 module.exports = {
-  purge: ["./components/**/*.{js,ts,jsx,tsx}", "./pages/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "media",
+  purge: {
+    mode: "jit",
+    purge: ["./src/**/*.{js,ts,jsx,tsx}", "./pages/**/*.{js,ts,jsx,tsx}"],
+  },
   theme: {
     extend: {
-      typography: typographyOverride,
+      colors: {
+        dark: "#24283b",
+      },
+
+      typography: typographyOveride,
     },
-  },
-  colors: {
-    gray: colors.coolGray,
-    blue: colors.sky,
-    red: colors.rose,
-    pink: colors.fuchsia,
   },
   extend: {
     fontFamily: {
@@ -25,10 +25,8 @@ module.exports = {
     wordBreak: ["responsive", "group-hover"],
     textOverflow: ["responsive", "group-hover"],
   },
-  plugins: [
-    require("@tailwindcss/typography")({
-      modifiers: [],
-    }),
-    require("@tailwindcss/ui"),
-  ],
+  variants: {
+    typography: ["dark"],
+  },
+  plugins: [require("@tailwindcss/typography")],
 };

@@ -1,4 +1,4 @@
-const typographyOverride = (theme) => ({
+module.exports = (theme) => ({
   DEFAULT: {
     css: {
       color: theme("colors.gray.200"),
@@ -52,10 +52,6 @@ const typographyOverride = (theme) => ({
       thead: {
         color: theme("colors.gray.50"),
       },
-
-      // ...
     },
   },
 });
-
-module.exports = typographyOverride;
