@@ -9,6 +9,62 @@ const daysAgo = (n: number) => format(subDays(new Date(), n), "yyyy-MM-dd");
 
 const mdSerialize = async (b: string) => await serialize(b);
 
+async function fetchArticleBySlug(slug: string) {
+  try {
+    const parsed = await ky
+      .post("https://content.jessetomchak.com/graphql", {
+        json: {
+          query: `
+          query ArticleBySlug {
+            articles( where: { slug_eq: "${slug}" }){
+              id
+              title
+              body
+              slug
+              published
+              updated_at
+              category{
+                Tag
+              }
+            }
+          }
+          `,
+        },
+      })
+      .json();
+    return parsed.data.articles[0];
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function fetchAllArticles() {
+  try {
+    const parsed = await ky
+      .post("https://content.jessetomchak.com/graphql", {
+        json: {
+          query: `
+      query AllArticles {
+        articles{
+          id
+          title
+          slug
+          published
+          category {
+            Tag
+          }
+        }
+      }
+    `,
+        },
+      })
+      .json();
+    return parsed;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function fetchArticles({
   limit,
   daysBack,
@@ -19,12 +75,11 @@ async function fetchArticles({
   const filters = `limit: ${limit}, sort:"published:desc", where: { published_gt: "${daysAgo(
     daysBack
   )}" }`;
-  console.log(filters);
   const parsed = await ky
     .post("https://content.jessetomchak.com/graphql", {
       json: {
         query: `
-    query AllArticles {
+    query FilteredArticles {
       articles(${filters}) {
         id
         title
@@ -40,7 +95,6 @@ async function fetchArticles({
       },
     })
     .json();
-  console.log(parsed);
 
   return Promise.all(
     parsed.data.articles.map(
@@ -49,6 +103,11 @@ async function fetchArticles({
         category: article.category.Tag,
         title: await mdSerialize(article.title),
         body: await mdSerialize(article.body),
+        relativeSlug: `/${[
+          new Date(article.published).getFullYear().toString(),
+          article.category.Tag,
+          article.slug,
+        ].join("/")}`,
       })
     )
   );
@@ -60,4 +119,4 @@ const useArticles = () => {
   );
 };
 
-export { fetchArticles, useArticles };
+export { fetchArticles, fetchAllArticles, fetchArticleBySlug, useArticles };

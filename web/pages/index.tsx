@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Article from '../src/components/Article';
-
+import Layout from '../src/components/Layout';
 import { fetchArticles } from '../src/hooks/useArticles';
 
 const Home: NextPage = ({articles}) => {
@@ -12,6 +12,8 @@ const Home: NextPage = ({articles}) => {
   </div>
   )
 }
+
+Home.getLayout = (page) => <Layout>{page}</Layout>;
 export default Home
 
 export async function getStaticProps() {
