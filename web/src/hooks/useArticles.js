@@ -5,14 +5,14 @@ import { serialize } from "next-mdx-remote/serialize";
 
 const BASE_URL = "https://content.jessetomchak.com/graphql";
 
-const daysAgo = (n: number) => format(subDays(new Date(), n), "yyyy-MM-dd");
+const daysAgo = (n) => format(subDays(new Date(), n), "yyyy-MM-dd");
 
-const mdSerialize = async (b: string) => await serialize(b);
+const mdSerialize = async (b) => await serialize(b);
 
-async function fetchArticleBySlug(slug: string) {
+async function fetchArticleBySlug(slug) {
   try {
     const parsed = await ky
-      .post("https://content.jessetomchak.com/graphql", {
+      .post(BASE_URL, {
         json: {
           query: `
           query ArticleBySlug {
@@ -41,7 +41,7 @@ async function fetchArticleBySlug(slug: string) {
 async function fetchAllArticles() {
   try {
     const parsed = await ky
-      .post("https://content.jessetomchak.com/graphql", {
+      .post(BASE_URL, {
         json: {
           query: `
       query AllArticles {
@@ -65,18 +65,12 @@ async function fetchAllArticles() {
   }
 }
 
-async function fetchArticles({
-  limit,
-  daysBack,
-}: {
-  limit: number;
-  daysBack: number;
-}) {
+async function fetchArticles({ limit, daysBack }) {
   const filters = `limit: ${limit}, sort:"published:desc", where: { published_gt: "${daysAgo(
     daysBack
   )}" }`;
   const parsed = await ky
-    .post("https://content.jessetomchak.com/graphql", {
+    .post(BASE_URL, {
       json: {
         query: `
     query FilteredArticles {
@@ -97,19 +91,17 @@ async function fetchArticles({
     .json();
 
   return Promise.all(
-    parsed.data.articles.map(
-      async (article: { body: string; category: String[] }) => ({
-        ...article,
-        category: article.category.Tag,
-        title: await mdSerialize(article.title),
-        body: await mdSerialize(article.body),
-        relativeSlug: `/${[
-          new Date(article.published).getFullYear().toString(),
-          article.category.Tag,
-          article.slug,
-        ].join("/")}`,
-      })
-    )
+    parsed.data.articles.map(async (article) => ({
+      ...article,
+      category: article.category.Tag,
+      title: await mdSerialize(article.title),
+      body: await mdSerialize(article.body),
+      relativeSlug: `/${[
+        new Date(article.published).getFullYear().toString(),
+        article.category.Tag,
+        article.slug,
+      ].join("/")}`,
+    }))
   );
 }
 

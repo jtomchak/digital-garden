@@ -2,8 +2,8 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 const typographyOveride = require("./styles/typography");
 module.exports = {
   darkMode: "media",
+  // mode: "jit",
   purge: {
-    mode: "jit",
     purge: ["./src/**/*.{js,ts,jsx,tsx}", "./pages/**/*.{js,ts,jsx,tsx}"],
   },
   theme: {

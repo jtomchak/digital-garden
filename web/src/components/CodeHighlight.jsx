@@ -2,7 +2,7 @@ import React from "react";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import theme from "prism-react-renderer/themes/nightOwl";
 
-const CodeHighlight = ({ children }) => {
+const CodeHighlight = ({ children, className }) => {
   const language = className?.replace(/language-/, "");
   return (
     <Highlight
@@ -21,8 +21,10 @@ const CodeHighlight = ({ children }) => {
           style={style}
         >
           {tokens.map((line, i) => (
+            // eslint-disable-next-line react/jsx-key
             <div {...getLineProps({ line, key: i })}>
               {line.map((token, key) => (
+                // eslint-disable-next-line react/jsx-key
                 <span {...getTokenProps({ token, key })} />
               ))}
             </div>
