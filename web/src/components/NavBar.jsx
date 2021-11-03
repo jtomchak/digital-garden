@@ -1,14 +1,13 @@
-
-import { Fragment } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { BeakerIcon } from '@heroicons/react/solid'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { SearchIcon } from '@heroicons/react/solid'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
+import { Fragment } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { BeakerIcon } from "@heroicons/react/solid";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { SearchIcon } from "@heroicons/react/solid";
+import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function NavBar() {
@@ -20,15 +19,15 @@ export default function NavBar() {
             <div className="relative flex items-center justify-between h-16">
               <div className="flex items-center px-2 lg:px-0">
                 <div className="flex-shrink-0">
-                  <BeakerIcon className="h-5 w-5 text-blue-500"/>
+                  <BeakerIcon className="h-5 w-5 text-blue-500" />
                 </div>
                 <div className="hidden lg:block lg:ml-6">
                   <div className="flex space-x-4">
                     {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                     <Link href="/">
-                    <a className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">
-                      Home
-                    </a>
+                      <a className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">
+                        Home
+                      </a>
                     </Link>
                     {/* <a
                       href="#"
@@ -36,7 +35,6 @@ export default function NavBar() {
                     >
                       Team
                     </a> */}
-                   
                   </div>
                 </div>
               </div>
@@ -47,7 +45,10 @@ export default function NavBar() {
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                      <SearchIcon
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
                     </div>
                     <input
                       id="search"
@@ -70,46 +71,25 @@ export default function NavBar() {
                   )}
                 </Disclosure.Button>
               </div>
-              
             </div>
           </div>
 
           <Disclosure.Panel className="lg:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Dashboard
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Team
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Projects
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="#"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Calendar
-              </Disclosure.Button>
+              <Link href="/" passHref>
+                <Disclosure.Button
+                  as="a"
+                  href="/"
+                  className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Home
+                </Disclosure.Button>
+              </Link>
             </div>
-        
           </Disclosure.Panel>
         </>
       )}
     </Disclosure>
-  )
+  );
 }

@@ -10,6 +10,19 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+      },
+      colors: {
+        teal: colors.cyan,
+
+        // for syntax highlighting
+        fuchsia: colors.fuchsia,
+        lime: colors.lime,
+        sky: colors.sky,
+        rose: colors.rose,
+        emerald: colors.emerald,
+      },
       typography: (theme) => ({
         DEFAULT: {
           css: {
@@ -23,7 +36,7 @@ module.exports = {
             },
             "h1 p a": {
               color: theme("colors.gray.400"),
-              fontWeight: "800",
+              fontWeight: "500",
             },
             "h2 p a": {
               color: theme("colors.gray.400"),
@@ -46,8 +59,9 @@ module.exports = {
                 color: theme("colors.gray.50"),
               },
             },
-            strong: {
+            "p strong": {
               color: theme("colors.gray.200"),
+              fontWeight: "600",
             },
             "p > strong::before": {
               color: theme("colors.gray.200"),
