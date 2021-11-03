@@ -37,9 +37,7 @@ export const getStaticPaths = async () => {
 // This function gets called at build time on server-side.
 export const getStaticProps = async ({ params }) => {
   // for query we only want the sanity slug of the array built in `getStaticPaths`
-  console.log("....PARAMS", params);
   const article = await fetchArticleBySlug(params.slug[2]);
-  console.log(article);
   const { title, body, ...rest } = article;
   const mdxTitle = await serialize(title, {});
   const mdxBody = await serialize(body, {});
