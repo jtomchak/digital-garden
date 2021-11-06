@@ -10,7 +10,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function NavBar() {
+export default function NavBar({ searchTerm, onChange, onKeyPress }) {
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -53,6 +53,9 @@ export default function NavBar() {
                     <input
                       id="search"
                       name="search"
+                      value={searchTerm}
+                      onChange={onChange}
+                      onKeyPress={onKeyPress}
                       className="block w-full pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 bg-gray-700 text-gray-300 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-white focus:ring-white focus:text-gray-900 sm:text-sm"
                       placeholder="Search"
                       type="search"

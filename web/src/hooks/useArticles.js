@@ -1,13 +1,81 @@
 import ky from "ky-universal";
 import { useQuery } from "react-query";
 import { format, subDays } from "date-fns";
-import { serialize } from "next-mdx-remote/serialize";
 
 const BASE_URL = "https://content.jessetomchak.com/graphql";
 
 const daysAgo = (n) => format(subDays(new Date(), n), "yyyy-MM-dd");
 
-const mdSerialize = async (b) => await serialize(b);
+async function fetchArticleByTerm(term) {
+  console.log(">>>TERM", term);
+  try {
+    const parsed = await ky
+      .post(BASE_URL, {
+        json: {
+          query: `
+          query ArticleBySearch {
+            articles(where: { title_contains: "${term}", body_contains: "${term}" }, limit: 10){
+              id
+              title
+              body
+              slug
+              published
+              updated_at
+              category{
+                Tag
+              }
+            }
+          }
+          `,
+        },
+      })
+      .json();
+    return parsed.data.articles;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function fetchArticlesSuspense(term) {
+  let status = "pending";
+  let result;
+  let suspender = ky
+    .post(BASE_URL, {
+      json: {
+        query: `
+      query ArticleBySearch {
+        articles(where: { title_contains: "${term}", body_contains: "${term}" }, limit: 10){
+          title
+          body
+          id
+        }
+      }
+      `,
+      },
+    })
+    .json()
+    .then(
+      (r) => {
+        status = "success";
+        result = r.data.articles;
+      },
+      (e) => {
+        status = "error";
+        result = e;
+      }
+    );
+  return {
+    read() {
+      if (status === "pending") {
+        throw suspender;
+      } else if (status === "error") {
+        throw result;
+      } else if (status === "success") {
+        return result;
+      }
+    },
+  };
+}
 
 async function fetchArticleBySlug(slug) {
   try {
@@ -90,25 +158,13 @@ async function fetchArticles({ limit, daysBack }) {
     })
     .json();
 
-  return Promise.all(
-    parsed.data.articles.map(async (article) => ({
-      ...article,
-      category: article.category.Tag,
-      title: await mdSerialize(article.title),
-      body: await mdSerialize(article.body),
-      relativeSlug: `/${[
-        new Date(article.published).getFullYear().toString(),
-        article.category.Tag,
-        article.slug,
-      ].join("/")}`,
-    }))
-  );
+  return parsed;
 }
 
-const useArticles = () => {
-  return useQuery(["articles"], () =>
-    fetchArticles({ limit: 30, daysBack: 60 })
-  );
+export {
+  fetchArticleByTerm,
+  fetchArticles,
+  fetchAllArticles,
+  fetchArticleBySlug,
+  fetchArticlesSuspense,
 };
-
-export { fetchArticles, fetchAllArticles, fetchArticleBySlug, useArticles };

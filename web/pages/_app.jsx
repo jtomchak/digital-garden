@@ -2,6 +2,7 @@ import * as React from "react";
 import Head from "next/head";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { SearchProvider } from "../src/search/search-context";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
@@ -14,7 +15,9 @@ function MyApp({ Component, pageProps }) {
         <Head>
           <title>Jesse Tomchak</title>
         </Head>
-        {getLayout(<Component {...pageProps} />)}
+        <SearchProvider>
+          {getLayout(<Component {...pageProps} />)}
+        </SearchProvider>
       </Hydrate>
       <ReactQueryDevtools />
     </QueryClientProvider>
