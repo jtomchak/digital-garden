@@ -1,6 +1,4 @@
+/** @type {import('next').NextConfig} */
 module.exports = {
-  /* config options here */
-  env: {
-    SANTIY_PROJECT_ID: process.env.SANTIY_PROJECT_ID,
-  },
+  reactStrictMode: true,
 };
