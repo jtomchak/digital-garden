@@ -1,13 +1,7 @@
 import Article from "../src/components/Article";
 import Layout from "../src/components/Layout";
-import { MDXRemote } from "next-mdx-remote";
 import { fetchArticles } from "../src/hooks/useArticles";
 import { serialize } from "next-mdx-remote/serialize";
-
-import CodeHighlight from "../src/components/CodeHighlight";
-import InLineCode from "../src/components/InlineCode";
-
-const components = { code: CodeHighlight, inlineCode: InLineCode };
 
 const Home = ({ articles }) => {
   return (
