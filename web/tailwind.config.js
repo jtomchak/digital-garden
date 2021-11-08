@@ -1,6 +1,5 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 const colors = require("tailwindcss/colors");
-const typographyOverride = require("./styles/typography");
 
 module.exports = {
   mode: "jit",
@@ -54,6 +53,12 @@ module.exports = {
               color: theme("colors.gray.200"),
             },
             a: {
+              color: theme("colors.gray.400"),
+              "&:hover": {
+                color: theme("colors.gray.50"),
+              },
+            },
+            "p a": {
               color: theme("colors.gray.400"),
               "&:hover": {
                 color: theme("colors.gray.50"),

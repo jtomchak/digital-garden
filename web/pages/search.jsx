@@ -1,47 +1,27 @@
 import React, { Suspense } from "react";
 import Article from "../src/components/Article";
 import Layout from "../src/components/Layout";
-import Pulse from "../src/components/Pulse";
+import { MDXRemote } from "next-mdx-remote";
 import { useRouter } from "next/router";
-import {
-  fetchArticleByTerm,
-  fetchArticlesSuspense,
-} from "../src/hooks/useArticles";
+import { serialize } from "next-mdx-remote/serialize";
+import { fetchArticleByTerm } from "../src/hooks/useArticles";
 
-import dynamic from "next/dynamic";
+import CodeHighlight from "../src/components/CodeHighlight";
+import InLineCode from "../src/components/InlineCode";
 
-const Search = () => {
+const components = { code: CodeHighlight, inlineCode: InLineCode };
+
+const Search = ({ articles }) => {
   const router = useRouter();
-  const [articles, setArticles] = React.useState([]);
-  React.useEffect(() => {
-    async function fetch() {
-      const resource = await fetchArticleByTerm(router.query.term);
-      console.log(resource);
-      setArticles(resource);
-    }
-    if (router.query.term) {
-      fetch(router.query.term);
-    }
-  }, [router.query]);
   return (
     <div className="text-gray-200 flex flex-col  justify-center items-center">
       <div className="relative">
-        {articles?.map((article) => (
-          <Article
-            key={article.id}
-            article={{
-              ...article,
-              category: article.category.Tag,
-              title: article.title,
-              body: article.body,
-              relativeSlug: `/${[
-                new Date(article.published).getFullYear().toString(),
-                article.category.Tag,
-                article.slug,
-              ].join("/")}`,
-            }}
-          />
-        ))}
+        {articles.length === 0 ? (
+          // eslint-disable-next-line react/no-unescaped-entities
+          <span>No results found for '{router.query.term}'</span>
+        ) : (
+          articles.map((a) => <Article key={a.id} article={a} />)
+        )}
       </div>
     </div>
   );
@@ -49,3 +29,25 @@ const Search = () => {
 
 Search.getLayout = (page) => <Layout>{page}</Layout>;
 export default Search;
+
+export async function getServerSideProps(context) {
+  const parsed = await fetchArticleByTerm(context.query.term);
+  const articles = await Promise.all(
+    parsed.map(async (article) => ({
+      ...article,
+      category: article.category.Tag,
+      title: await serialize(article.title),
+      body: await serialize(article.body),
+      relativeSlug: `/${[
+        new Date(article.published).getFullYear().toString(),
+        article.category.Tag,
+        article.slug,
+      ].join("/")}`,
+    }))
+  );
+  return {
+    props: {
+      articles,
+    },
+  };
+}

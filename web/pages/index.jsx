@@ -13,18 +13,9 @@ const Home = ({ articles }) => {
   return (
     <div className="text-gray-200 flex flex-col  justify-center items-center">
       <div className="relative">
-        {articles.map((a) => {
-          const mdTitle = <MDXRemote {...a.title}></MDXRemote>;
-          const mdBody = (
-            <MDXRemote {...a.body} components={components}></MDXRemote>
-          );
-          return (
-            <Article
-              key={a.id}
-              article={{ ...a, title: mdTitle, body: mdBody }}
-            />
-          );
-        })}
+        {articles.map((a) => (
+          <Article key={a.id} article={a} />
+        ))}
       </div>
     </div>
   );
