@@ -13,11 +13,7 @@ const CodeHighlight = ({ children, className }) => {
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre
-          className={{
-            whitSpace: "pre-wrap",
-            wordWrap: "break-word",
-            textAlign: "justify",
-          }}
+          className="whitespace-pre-wrap break-words text-justify"
           style={style}
         >
           {tokens.map((line, i) => (
