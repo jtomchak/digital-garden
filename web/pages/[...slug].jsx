@@ -19,16 +19,23 @@ const ArticlePage = ({ article }) => {
 
 ArticlePage.getLayout = (page) => <Layout>{page}</Layout>;
 
+async function fetchArticles(arr = [], start = 0) {
+  const {
+    data: { articles },
+  } = await fetchAllArticles({ start });
+  const merged = arr.concat(articles);
+  if (articles.length === 0) return merged;
+  return fetchArticles(merged, start + 100);
+}
+
 export const getStaticPaths = async () => {
   // Get the paths we want to pre-render based on persons
-  const parsed = await fetchAllArticles();
-  const paths = parsed.data.articles.map(
-    ({ id, slug, category: { Tag }, published }) => {
-      const year = new Date(published).getFullYear().toString();
-      // building slug path from year / category / sanity slug
-      return { params: { slug: [year, Tag, slug] } };
-    }
-  );
+  let articles = await fetchArticles();
+  const paths = articles.map(({ id, slug, category: { Tag }, published }) => {
+    const year = new Date(published).getFullYear().toString();
+    // building slug path from year / category / sanity slug
+    return { params: { slug: [year, Tag, slug] } };
+  });
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
   return { paths, fallback: false };
