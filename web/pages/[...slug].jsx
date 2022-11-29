@@ -40,7 +40,6 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }) => {
   // for query we only want the sanity slug of the array built in `getStaticPaths`
   const article = await fetchArticleBySlug(params.slug[2]);
-  console.log(article);
   const { title, body, ...rest } = article;
   const mdxTitle = await serialize(title);
   const mdxBody = await serialize(body);

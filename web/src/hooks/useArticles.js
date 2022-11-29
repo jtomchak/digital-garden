@@ -101,7 +101,6 @@ async function fetchArticleBySlug(slug) {
         },
       })
       .json();
-    console.log(parsed.data.allPost[0]);
     return parsed.data.allPost[0];
   } catch (err) {
     console.log(err);
