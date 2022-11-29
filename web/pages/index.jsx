@@ -25,17 +25,17 @@ Home.getLayout = (page) => <Layout>{page}</Layout>;
 export default Home;
 
 export async function getStaticProps() {
-  const parsed = await fetchArticles({ limit: 30, daysBack: 70 });
+  const { data } = await fetchArticles({ limit: 30, daysBack: 70 });
   const articles = await Promise.all(
-    parsed.data.articles.map(async (article) => ({
+    data.allPost.map(async (article) => ({
       ...article,
-      category: article.category.Tag,
+      category: article.categories[0].title,
       title: await serialize(article.title),
       body: await serialize(article.body),
       relativeSlug: `/${[
-        new Date(article.published).getFullYear().toString(),
-        article.category.Tag,
-        article.slug,
+        new Date(article.publishedAt).getFullYear().toString(),
+        article.categories[0].title,
+        article.slug.current,
       ].join("/")}`,
     }))
   );
