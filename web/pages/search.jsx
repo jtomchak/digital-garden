@@ -35,13 +35,13 @@ export async function getServerSideProps(context) {
   const articles = await Promise.all(
     parsed.map(async (article) => ({
       ...article,
-      category: article.category.Tag,
+      category: article.categories[0].title,
       title: await serialize(article.title),
       body: await serialize(article.body),
       relativeSlug: `/${[
-        new Date(article.published).getFullYear().toString(),
-        article.category.Tag,
-        article.slug,
+        new Date(article.publishedAt).getFullYear().toString(),
+        article.categories[0].title,
+        article.slug.current,
       ].join("/")}`,
     }))
   );

@@ -13,24 +13,26 @@ async function fetchArticleByTerm(term) {
       .post(BASE_URL, {
         json: {
           query: `
-          query ArticleBySearch {
-            articles(where: { title_contains: "${term}", body_contains: "${term}" }, limit: 10){
-              id
+          query SearchArticleByTerm($term: String) {
+            allPost(  where: { title :  {matches: $term }, body:{matches:$term}}, limit: 10){
               title
               body
-              slug
-              published
-              updated_at
-              category{
-                Tag
+              slug{
+                current
+              }
+              publishedAt
+              _updatedAt
+    					categories{
+                title
               }
             }
-          }
+            }
           `,
+          variables: { term: `${term}` },
         },
       })
       .json();
-    return parsed.data.articles;
+    return parsed.data.allPost;
   } catch (err) {
     console.log(err);
   }
