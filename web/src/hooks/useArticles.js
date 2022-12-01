@@ -109,7 +109,8 @@ async function fetchArticleBySlug(slug) {
   }
 }
 
-async function fetchAllArticles() {
+async function fetchAllArticles({ start = 0 }) {
+  const filters = `limit: 100, start: ${start}`;
   try {
     const parsed = await ky
       .post(BASE_URL, {

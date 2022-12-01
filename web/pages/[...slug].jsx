@@ -19,6 +19,15 @@ const ArticlePage = ({ article }) => {
 
 ArticlePage.getLayout = (page) => <Layout>{page}</Layout>;
 
+async function fetchArticles(arr = [], start = 0) {
+  const {
+    data: { articles },
+  } = await fetchAllArticles({ start });
+  const merged = arr.concat(articles);
+  if (articles.length === 0) return merged;
+  return fetchArticles(merged, start + 100);
+}
+
 export const getStaticPaths = async () => {
   // Get the paths we want to pre-render based on persons
   const result = await fetchAllArticles();
@@ -31,6 +40,7 @@ export const getStaticPaths = async () => {
       };
     }
   );
+
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
   return { paths, fallback: false };
