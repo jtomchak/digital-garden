@@ -2,7 +2,7 @@ import ky from "ky-universal";
 import { useQuery } from "react-query";
 import { format, subDays } from "date-fns";
 
-const BASE_URL = "https://content.jessetomchak.com/graphql";
+const BASE_URL = "https://04imn06s.api.sanity.io/v1/graphql/production/default";
 
 const daysAgo = (n) => format(subDays(new Date(), n), "yyyy-MM-dd");
 
@@ -13,24 +13,26 @@ async function fetchArticleByTerm(term) {
       .post(BASE_URL, {
         json: {
           query: `
-          query ArticleBySearch {
-            articles(where: { title_contains: "${term}", body_contains: "${term}" }, limit: 10){
-              id
+          query SearchArticleByTerm($term: String) {
+            allPost(  where: { title :  {matches: $term }, body:{matches:$term}}, limit: 10){
               title
               body
-              slug
-              published
-              updated_at
-              category{
-                Tag
+              slug{
+                current
+              }
+              publishedAt
+              _updatedAt
+    					categories{
+                title
               }
             }
-          }
+            }
           `,
+          variables: { term: `${term}` },
         },
       })
       .json();
-    return parsed.data.articles;
+    return parsed.data.allPost;
   } catch (err) {
     console.log(err);
   }
@@ -82,48 +84,50 @@ async function fetchArticleBySlug(slug) {
     const parsed = await ky
       .post(BASE_URL, {
         json: {
-          query: `
-          query ArticleBySlug {
-            articles( where: { slug_eq: "${slug}" }){
-              id
-              title
-              body
-              slug
-              published
-              updated_at
-              category{
-                Tag
-              }
-            }
-          }
-          `,
+          query: `query ArticleBySlug($slug: String) {
+                  allPost( where: { slug : {current : {eq: $slug }}}){
+                    _id
+                    title
+                    body
+                    slug{
+                      current
+                    }
+                    publishedAt
+                    _updatedAt
+                    categories{
+                      title
+                    }
+                  }
+                  }`,
+          variables: { slug: `${slug}` },
         },
       })
       .json();
-    return parsed.data.articles[0];
+    return parsed.data.allPost[0];
   } catch (err) {
     console.log(err);
   }
 }
 
-async function fetchAllArticles({ start = 0 }) {
-  const filters = `limit: 100, start: ${start}`;
+async function fetchAllArticles() {
   try {
     const parsed = await ky
       .post(BASE_URL, {
         json: {
           query: `
-      query AllArticles {
-        articles(${filters}){
-          id
-          title
-          slug
-          published
-          category {
-            Tag
+          query AllArticles {
+            allPost{
+              _id
+              title
+              slug{
+                current
+              }
+              publishedAt
+              categories {
+                title
+              }
+            }
           }
-        }
-      }
     `,
         },
       })
@@ -142,18 +146,20 @@ async function fetchArticles({ limit, daysBack }) {
     .post(BASE_URL, {
       json: {
         query: `
-    query FilteredArticles {
-      articles(${filters}) {
-        id
-        title
-        body
-        slug
-        published
-        category {
-          Tag
-        }
+        query LastestArticles {
+          allPost(limit: 30, sort:{publishedAt: DESC}) {
+            _id
+            title
+            body
+            slug{
+              current
+            }
+            publishedAt
+            categories{
+              title
+            }
+          }
       }
-    }
   `,
       },
     })

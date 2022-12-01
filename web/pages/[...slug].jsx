@@ -30,12 +30,17 @@ async function fetchArticles(arr = [], start = 0) {
 
 export const getStaticPaths = async () => {
   // Get the paths we want to pre-render based on persons
-  let articles = await fetchArticles();
-  const paths = articles.map(({ id, slug, category: { Tag }, published }) => {
-    const year = new Date(published).getFullYear().toString();
-    // building slug path from year / category / sanity slug
-    return { params: { slug: [year, Tag, slug] } };
-  });
+  const result = await fetchAllArticles();
+  const paths = result?.data?.allPost?.map(
+    ({ id, slug, categories, publishedAt }) => {
+      const year = new Date(publishedAt).getFullYear().toString();
+      // building slug path from year / category / sanity slug
+      return {
+        params: { slug: [year, categories[0].title, slug.current] },
+      };
+    }
+  );
+
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
   return { paths, fallback: false };
