@@ -26,9 +26,7 @@ Search.getLayout = (page) => <Layout>{page}</Layout>;
 export default Search;
 
 export async function getServerSideProps(context) {
-  const parsed = await fetchArticleByTerm(context.query.term);
   const results = await postsBySearch(context.query.term);
-  console.log(results);
   const articles = await Promise.all(
     results.map(async (article) => ({
       ...article,
