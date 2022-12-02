@@ -1,15 +1,10 @@
 import React, { Suspense } from "react";
 import Article from "../src/components/Article";
 import Layout from "../src/components/Layout";
-import { MDXRemote } from "next-mdx-remote";
 import { useRouter } from "next/router";
 import { serialize } from "next-mdx-remote/serialize";
 import { fetchArticleByTerm } from "../src/hooks/useArticles";
-
-import CodeHighlight from "../src/components/CodeHighlight";
-import InLineCode from "../src/components/InlineCode";
-
-const components = { code: CodeHighlight, inlineCode: InLineCode };
+import { postsBySearch } from "../src/api";
 
 const Search = ({ articles }) => {
   const router = useRouter();
@@ -32,16 +27,18 @@ export default Search;
 
 export async function getServerSideProps(context) {
   const parsed = await fetchArticleByTerm(context.query.term);
+  const results = await postsBySearch(context.query.term);
+  console.log(results);
   const articles = await Promise.all(
-    parsed.map(async (article) => ({
+    results.map(async (article) => ({
       ...article,
-      category: article.categories[0].title,
+      category: article.category,
       title: await serialize(article.title),
       body: await serialize(article.body),
       relativeSlug: `/${[
         new Date(article.publishedAt).getFullYear().toString(),
-        article.categories[0].title,
-        article.slug.current,
+        article.category,
+        article.slug,
       ].join("/")}`,
     }))
   );
